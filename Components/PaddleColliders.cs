@@ -20,7 +20,7 @@ namespace Breakout.Components
 			int sectionHeight = (int)paddleSize.Y/3;
 
 			for (int i = 0; i < sectionCount; i++)
-				sections[i] = new BoxCollider2D(i * sectionWidth, 0, sectionWidth, sectionHeight, entity); 
+				sections[i] = new BoxCollider2D(new Rectangle(i * sectionWidth, 0, sectionWidth, sectionHeight), entity); 
 			
 		}
 

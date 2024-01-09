@@ -1,6 +1,8 @@
 ﻿using Breakout.Scenes;
 using EC.Components;
 using EC.Components.Colliders;
+using EC.Components.Render;
+using EC.Components.Renderers;
 using EC.CoreSystem;
 using EC.Services;
 using EC.Utilities;
@@ -16,10 +18,10 @@ using static EC.Services.CollisionManager;
 
 namespace Breakout.Entities
 {
-	internal class Ball : Entity
+    internal class Ball : Entity
 	{
 		private Transform transform;
-		private RectangleRenderer rectangleRenderer;
+		private CircleRenderer circleRenderer;
 		private CircleCollider2D circleCollider;
 		private Paddle paddle;
 		private Velocity velocity;
@@ -28,25 +30,25 @@ namespace Breakout.Entities
 		private int circleRadius;
 
 		private CollisionManager collisionManager;
-		private InputManager inputManager;
+		private InputManager inputManager; 
 
 		public Ball(Game game) : base(game)
 		{
 			transform = new Transform(this);
-			rectangleRenderer = new RectangleRenderer("ball", 12, 12, Color.Beige, game, this);
+			circleRenderer = new CircleRenderer("ball", 6, Color.Beige, game, this);
 
-			Origin origin = new Origin(new Vector2(rectangleRenderer.TextureWidth / 2, rectangleRenderer.TextureHeight / 2), this);
+			Origin origin = new Origin(new Vector2(circleRenderer.TextureWidth / 2, circleRenderer.TextureHeight / 2), this);
 			AddComponent(origin);
-			circleRadius = rectangleRenderer.TextureWidth / 2;
+			circleRadius = circleRenderer.TextureWidth / 2;
 			AddComponent(transform);
-			circleCollider = new CircleCollider2D(transform.Position.X + origin.Value.X, transform.Position.Y + origin.Value.Y, circleRadius, this);
+			circleCollider = new CircleCollider2D(new Circle(new Vector2(transform.Position.X + origin.Value.X, transform.Position.Y + origin.Value.Y), circleRadius), this);
 
 			velocity = new Velocity(transform, this);
 
-			displayManager = game.Services.GetService<DisplayManager>();	
+			displayManager = game.Services.GetService<DisplayManager>();
 
-			speed = 500;
-			AddComponents(rectangleRenderer, circleCollider, velocity);
+			speed = 450;
+			AddComponents(circleRenderer, circleCollider, velocity);
 
 			//transform.LocalPosition = new Vector2(400, 400);
 
@@ -60,13 +62,7 @@ namespace Breakout.Entities
 
 			velocity.Value = new Vector2(speedX, speedY);
 
-			//if (circleCollider.Bounds.Contains(inputManager.MousePosition()))
-			//{
-			//	rectangleRenderer.Color = Color.Blue;
-			//} else
-			//{
-			//	rectangleRenderer.Color = Color.White;
-			//}
+	
 
 			ReflectOffEdges();
 		}

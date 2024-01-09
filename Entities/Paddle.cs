@@ -2,6 +2,8 @@
 using Breakout.Scenes;
 using EC.Components;
 using EC.Components.Colliders;
+using EC.Components.Render;
+using EC.Components.Renderers;
 using EC.CoreSystem;
 using EC.Services;
 using Microsoft.Xna.Framework;
@@ -16,7 +18,7 @@ using static Breakout.Scenes.PlayingScene;
 
 namespace Breakout.Entities
 {
-	internal class Paddle : Entity
+    internal class Paddle : Entity
 	{
 		private Transform transform;
 		private Vector2 rectangleSize;

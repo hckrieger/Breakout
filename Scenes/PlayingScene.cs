@@ -2,6 +2,8 @@
 using Breakout.Entities;
 using EC.Components;
 using EC.Components.Colliders;
+using EC.Components.Render;
+using EC.Components.Renderers;
 using EC.CoreSystem;
 using EC.Services;
 using Microsoft.Xna.Framework;
@@ -18,13 +20,15 @@ using static EC.Services.CollisionManager;
 
 namespace Breakout.Scenes
 {
-	internal class PlayingScene : Scene
+    internal class PlayingScene : Scene
 	{
 		private Paddle paddle;
 		private Ball ball;
 		private InputManager inputManager;
 		private DisplayManager displayManager;
 		private CollisionManager collisionManager;
+
+		private SpriteRenderer charizard; 
 
 		private const int BRICK_COLS = 12;
 		private const int BRICK_ROWS = 6;
@@ -35,7 +39,8 @@ namespace Breakout.Scenes
 
 		bool ballInBrickCollidingRegion = false;
 
-		bool hasCollisionInLoop = false;
+
+		Entity score; 
 
 		public PlayingScene(Game game) : base(game) 
 		{
@@ -45,6 +50,15 @@ namespace Breakout.Scenes
 			AddEntities(paddle, ball);
 
 			paddle.AttachBall(ball);
+
+			score = new Entity(game);
+			AddEntity(score);
+			Transform transform = new Transform(score);
+			score.AddComponent(transform);
+			
+			score.AddComponents(new TextRenderer("Fonts/Score", "Score: 0", Color.Black, game, score));
+			score.GetComponent<TextRenderer>().TextAlignment = TextRenderer.Alignment.Center;
+			
 
 			inputManager = game.Services.GetService<InputManager>();
 			displayManager = game.Services.GetService<DisplayManager>();
@@ -85,7 +99,6 @@ namespace Breakout.Scenes
 		}
 
 
-
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
@@ -116,7 +129,7 @@ namespace Breakout.Scenes
 			if (!ballInBrickCollidingRegion)
 				return;
 
-
+			score.GetComponent<Transform>().LocalPosition = new Vector2(300, 300);
 
 
 			for (int y = 0; y < BRICK_ROWS; y++)
