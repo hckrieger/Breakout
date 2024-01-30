@@ -6,6 +6,7 @@ using EC.Components.Render;
 using EC.Components.Renderers;
 using EC.CoreSystem;
 using EC.Services;
+using EC.Utilities.Extensions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -20,13 +21,11 @@ namespace Breakout.Entities
 {
     internal class Paddle : Entity
 	{
-		private Transform transform;
 		private Vector2 rectangleSize;
-		private DisplayManager displayManager;
 		private InputManager inputManager;
 		private PaddleColliders paddleColliders;
 		private CollisionManager collisionManager;
-		private RectangleRenderer rectangleRenderer;
+		private BoxCollider2D gameWorldBounds;
 
 		public enum LaunchSection
 		{
@@ -38,37 +37,38 @@ namespace Breakout.Entities
 		}
 
 
-		int windowWidth, windowHeight;
-		public Paddle(Game game) : base(game)
+		public Paddle(BoxCollider2D gameWorldBounds, Game game) : base(game)
 		{
-
-			displayManager = game.Services.GetService<DisplayManager>();
 
 			rectangleSize = new Vector2(90, 20);
 
-			transform = new Transform(this);
-			transform.LocalPosition = new Vector2(displayManager.WindowCenter.X, displayManager.Height - rectangleSize.Y);
-			AddComponent(transform);
+			this.LoadRectangleComponents("paddle", (int)rectangleSize.X, (int)rectangleSize.Y, Color.Azure, game, true);
 
-			Origin origin = new Origin(rectangleSize / 2, this);
-			AddComponent(origin);
 
-			rectangleRenderer = new RectangleRenderer("paddle", (int)rectangleSize.X, (int)rectangleSize.Y, Color.Azure, game, this);
+			this.gameWorldBounds = gameWorldBounds;
+
+		}
+
+		public override void Initialize()
+		{
+			base.Initialize();
+
+
+			GetComponent<Origin>().Value = GetComponent<RectangleRenderer>().TextureCenter;
+			//AddComponent(new Origin(GetComponent<RectangleRenderer>().TextureCenter, this));
+
 
 			paddleColliders = new PaddleColliders(this, 5, rectangleSize);
-			
+			AddComponent(paddleColliders);
 
-			AddComponents(rectangleRenderer, paddleColliders);
 
-			
-			windowWidth = displayManager.Width;
-			windowHeight = displayManager.Height;
 
-			inputManager = game.Services.GetService<InputManager>();
+			inputManager = Game.Services.GetService<InputManager>();
 
-			rectangleRenderer.LayerDepth = .6f;
 
-			collisionManager = game.Services.GetService<CollisionManager>();
+			collisionManager = Game.Services.GetService<CollisionManager>();
+
+			TrackPosition();
 		}
 
 
@@ -77,24 +77,29 @@ namespace Breakout.Entities
 		{
 			base.Update(gameTime);
 
+			TrackPosition();
+
+
+		}
+
+		public void TrackPosition()
+		{
 			var mousePosition = inputManager.MousePosition(); //Get the mouse position
 
 			//Keep the padding on screen even when the curor goes out of screen
-			var clampedXAxis = Math.Clamp(mousePosition.X, rectangleSize.X / 1.9f, windowWidth - rectangleSize.X / 1.9f);
+			var clampedXAxis = Math.Clamp(mousePosition.X, rectangleSize.X / 1.9f, gameWorldBounds.Bounds.Width - rectangleSize.X / 1.9f);
 
 
 			//Keep the paddle on the bottom of the screen
-			var constrainedYAxis = windowHeight - rectangleSize.Y / 1.25f;
+			var constrainedYAxis = gameWorldBounds.Bounds.Height - rectangleSize.Y / 1.25f;
 
-			transform.LocalPosition = new Vector2(clampedXAxis, constrainedYAxis);
-
-
+			Transform.LocalPosition = new Vector2(clampedXAxis, constrainedYAxis);
 		}
 
 		public void AttachBall(Ball ball)
 		{
 			ball.SetParent(this);
-			ball.GetComponent<Transform>().LocalPosition = new Vector2(0, -18);
+			ball.Transform.LocalPosition = new Vector2(0, -18);
 		}
 
 		public void DetachBall(Ball ball, LaunchSection launchSection)
@@ -127,5 +132,11 @@ namespace Breakout.Entities
 
 		}
 
+		public override void Reset()
+		{
+			base.Reset();
+
+			TrackPosition();
+		}
 	}
 }
