@@ -72,7 +72,7 @@ namespace Breakout.Scenes
 			Entity exitText = new Entity(game);
 			exitText.LoadTextComponents("Fonts/Score", "Exit", Color.Black, game, TextRenderer.Alignment.Center);
 			exitText.Transform.Parent = exitButtonBox.Transform;
-			exitText.GetComponent<TextRenderer>().LayerDepth = .9f;
+			exitText.GetComponent<TextRenderer>().LayerDepth = exitButtonBox.GetComponent<RectangleRenderer>().LayerDepth + .1f;
 			exitText.Transform.LocalPosition = Vector2.Zero;
 
 			exitButtonBox.GetComponent<Button>().Clicked += () => game.Exit();

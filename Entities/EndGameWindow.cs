@@ -1,6 +1,7 @@
 ﻿using EC.Components;
 using EC.Components.Colliders;
 using EC.Components.Render;
+using EC.Components.Renderers;
 using EC.Components.UI;
 using EC.CoreSystem;
 using EC.Services;
@@ -21,14 +22,15 @@ namespace Breakout.Entities
 
 		public event Action GameReset;
 
-		Entity playAgainButton;
+		private Entity textMessage;
+
+		public string Message { get; set; }
 
 		public EndGameWindow(Entity gameWorld, Game game) : base(game)
 		{
 			this.LoadRectangleComponents("end game window", 250, 200, Color.LightSteelBlue, game, false);
 
 			var rectangleRenderer = GetComponent<RectangleRenderer>();
-			rectangleRenderer.LayerDepth = .75f;
 
 
 			AddComponent(new Origin(rectangleRenderer.TextureCenter, this));
@@ -36,34 +38,68 @@ namespace Breakout.Entities
 			var centerPoint = gameWorld.GetComponent<BoxCollider2D>().Bounds;
 			Transform.LocalPosition = new Vector2(centerPoint.Width / 2, centerPoint.Height / 2);
 
+
+
+			textMessage = new Entity(Game);
+			textMessage.LoadTextComponents("Fonts/PopUpMessage", "", Color.Black, Game, TextRenderer.Alignment.Center);
+			textMessage.Transform.Parent = Transform;
+			textMessage.Transform.LocalPosition = new Vector2(0, -33);
+
 			
 
-			playAgainButton = new Entity(Game);
+			Entity playAgainButton = new Entity(Game);
 			playAgainButton.Transform.Parent = Transform;
-			playAgainButton.LoadRectangleComponents("button rectangle", 50, 33, Color.Green, Game, true);
+			playAgainButton.LoadRectangleComponents("button rectangle", 70, 33, Color.Green, Game, true);
 			playAgainButton.Transform.LocalPosition = new Vector2(0, 50);
 			var buttonRenderer = playAgainButton.GetComponent<RectangleRenderer>();
 			
 			
-			buttonRenderer.LayerDepth = .85f;
 			playAgainButton.AddComponent(new Button(game, playAgainButton));
 			playAgainButton.GetComponent<Origin>().Value = buttonRenderer.TextureCenter;
 
 			playAgainButton.GetComponent<Button>().Clicked += () => GameReset?.Invoke();
 
-			windowEntities = new Entity[] { this, playAgainButton };
+			Entity restartText = new Entity(Game);
+			restartText.LoadTextComponents("Fonts/Score", "Restart", Color.Black, game, TextRenderer.Alignment.Center);
+			restartText.Transform.Parent = playAgainButton.Transform;
+
+
+
+			windowEntities = new Entity[] { this, playAgainButton, textMessage, restartText };
+
+			foreach (var entity in windowEntities)
+			{
+				var renderer = entity.GetComponent<Renderer>();
+				if (renderer != null)
+				{
+					var parentRenderer = entity.Transform.Parent?.Entity.GetComponent<Renderer>();
+					if (parentRenderer != null)
+					{
+						renderer.LayerDepth = parentRenderer.LayerDepth + .05f;
+					}
+				}
+			}
+
+
 
 			SetAllEndWindowEntitiesVisibility(false);
 		}
 
-	
+
+		public override void Update(GameTime gameTime)
+		{
+			base.Update(gameTime);
+
+			textMessage.GetComponent<TextRenderer>().Text = Message;
+		}
 
 
 		public void SetAllEndWindowEntitiesVisibility(bool visible)
 		{
 			foreach (var entity in windowEntities)
 			{
-				entity.Visible = visible;	
+				entity.Visible = visible;
+				entity.Enabled = visible;
 			}
 
 		}

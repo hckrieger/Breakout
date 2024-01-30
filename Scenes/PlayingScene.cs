@@ -72,7 +72,7 @@ namespace Breakout.Scenes
 			paddle = new Paddle(gameWorldBounds, Game);
 			ball = new Ball(gameWorldBounds, Game);
 
-			ball.BallPassedPaddle += PopUpWindow;
+			ball.BallPassedPaddle += ShowEndGameWindow;
 
 
 			AddEntity(ball, GameWorld);
@@ -130,7 +130,7 @@ namespace Breakout.Scenes
 					brickGrid[x, y] = new Entity(Game);
 					brickGrid[x, y].LoadRectangleComponents($"brick-{x}x{y}", rectangleSize.X, rectangleSize.Y, color, Game, true);
 					var renderedBrick = brickGrid[x, y].GetComponent<RectangleRenderer>();
-					//	renderedBrick.LayerDepth = .1f;
+						renderedBrick.LayerDepth = .1f;
 					brickGrid[x, y].Transform.LocalPosition = new Vector2(x * (renderedBrick.TextureWidth + 1), y * (renderedBrick.TextureHeight + 1) + brickHeightPlacement);
 					AddEntity(brickGrid[x, y], GameWorld);
 				}
@@ -200,25 +200,33 @@ namespace Breakout.Scenes
 		
 			if (bricksHit == BRICK_COLS*BRICK_ROWS)
 			{
-				Reset();
+				ShowEndGameWindow();
+				
 			}
 
 		}
 
-		public void PopUpWindow()
+		public void ShowEndGameWindow()
 		{
 			endGameWindow.SetAllEndWindowEntitiesVisibility(true);
+			if (ball.Transform.Position.Y > displayManager.Height)
+				endGameWindow.Message = "Try again!";
+			else
+				endGameWindow.Message = "You win!";
+
+			EnableBallAndPaddle(false);
+			
 		}
 
 		public override void Reset()
 		{
-			ball.Reset();
 			
 
-			//paddle.Transform.LocalPosition = displayManager.WindowCenter;
 
+			
+			ball.Reset();
 			paddle.AttachBall(ball);
-
+			EnableBallAndPaddle();
 			for (int y = 0; y < BRICK_ROWS; y++)
 			{
 				for (int x = 0; x < BRICK_COLS; x++)
@@ -229,11 +237,18 @@ namespace Breakout.Scenes
 
 			bricksHit = 0;
 
-			
+			Enabled = true;
 
 			endGameWindow.SetAllEndWindowEntitiesVisibility(false);
 			
 
+		}
+
+
+		public void EnableBallAndPaddle(bool enable = true)
+		{
+			ball.Enabled = enable;
+			paddle.Enabled = enable;
 		}
 
 	}

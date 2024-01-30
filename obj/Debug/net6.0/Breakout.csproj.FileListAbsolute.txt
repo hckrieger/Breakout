@@ -28,3 +28,4 @@ C:\Users\hunte\source\repos\MonoGame\games\Breakout\obj\Debug\net6.0\ref\Breakou
 C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Sprites\charizard.xnb
 C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Fonts\Score.xnb
 C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Fonts\Title.xnb
+C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Fonts\PopUpMessage.xnb
