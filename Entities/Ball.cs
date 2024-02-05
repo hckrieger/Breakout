@@ -2,18 +2,13 @@
 using EC.Components;
 using EC.Components.Colliders;
 using EC.Components.Render;
-using EC.Components.Renderers;
 using EC.CoreSystem;
 using EC.Services;
+using EC.Services.AssetManagers;
 using EC.Utilities;
 using EC.Utilities.Extensions;
 using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using static Breakout.Entities.Paddle;
 using static EC.Services.CollisionManager;
 
@@ -29,10 +24,13 @@ namespace Breakout.Entities
 
 		private CollisionManager collisionManager;
 		private InputManager inputManager;
+		private AudioAssetManager audioAssetManager;
 
 		private BoxCollider2D gameWorldCollider;
 
 		public event Action BallPassedPaddle;
+
+		public event EventHandler<CollisionEventArgs> OnCollision;
 
 		public Ball(BoxCollider2D gameWorldCollider, Game game) : base(game)
 		{
@@ -41,7 +39,7 @@ namespace Breakout.Entities
 
 			this.gameWorldCollider = gameWorldCollider;
 
-
+			audioAssetManager = game.Services.GetService<AudioAssetManager>();
 		}
 
 		public override void Initialize()
@@ -53,7 +51,7 @@ namespace Breakout.Entities
 
 			displayManager = Game.Services.GetService<DisplayManager>();
 
-			speed = 450;
+			speed = 500;
 
 			collisionManager = Game.Services.GetService<CollisionManager>();
 			inputManager = Game.Services.GetService<InputManager>();
@@ -71,6 +69,16 @@ namespace Breakout.Entities
 			ReflectOffEdges();
 		}
 
+		public void RaiseCollisionEvent(string collisionWith)
+		{
+			OnCollision?.Invoke(this, new CollisionEventArgs(collisionWith));
+		}
+
+		public void RaiseBrickCollisionEvent(int hitRow)
+		{
+			OnCollision?.Invoke(this, new BrickCollisionEventArgs(hitRow));
+		}
+
 		public void SetParent(Paddle newParent)
 		{
 			paddle = newParent;
@@ -85,16 +93,24 @@ namespace Breakout.Entities
 
 		public void ReflectOffEdges()
 		{
-
+			//audioAssetManager.PlaySoundEffect("Audio/Sound/wallCollisionSound");
 			var collider = GetComponent<CircleCollider2D>();
 
 			if ((velocity.Value.X >= 0 && (Transform.Position.X + circleRadius) > gameWorldCollider.Bounds.Right) || 
 				(velocity.Value.X < 0 && (Transform.Position.X - circleRadius) < gameWorldCollider.Bounds.Left))
+			{
 				speedX = -speedX;
+				RaiseCollisionEvent("boundary");
+			}
+				
 
 
 			if (velocity.Value.Y < 0 && (Transform.Position.Y - circleRadius) < gameWorldCollider.Bounds.Top + 3)
+			{
 				speedY = -speedY;
+				RaiseCollisionEvent("boundary");
+			}
+				
 
 			if (Transform.Position.Y + circleRadius > gameWorldCollider.Bounds.Bottom + 100)
 			{
@@ -118,11 +134,13 @@ namespace Breakout.Entities
 
 		public void ReflectBallFromSection(LaunchSection LaunchSection, Paddle paddle)
 		{
+			
 			var velocityVector = Vector2.Zero;
+
 
 			switch (LaunchSection)
 			{
-
+				
 				case LaunchSection.OuterLeft:
 					velocityVector = MathUtils.VelocityFromDegrees(150, speed);
 					break;
@@ -136,8 +154,8 @@ namespace Breakout.Entities
 						velocityVector = MathUtils.VelocityFromDegrees(110, speed);
 					else
 						velocityVector = MathUtils.VelocityFromDegrees(80, speed);
-					
 
+					
 
 					break;
 				case LaunchSection.MiddleRight:
@@ -150,6 +168,9 @@ namespace Breakout.Entities
 
 			speedX = velocityVector.X;
 			speedY = velocityVector.Y;
+
+			if (LaunchSection != LaunchSection.None)
+				RaiseCollisionEvent("paddle");
 		}
 
 		public override void Reset()
@@ -161,7 +182,7 @@ namespace Breakout.Entities
 				velocity.Value = Vector2.Zero;
 
 			SetParent(paddle); // if the paddle is always the starting position
-			Transform.LocalPosition = new Vector2(0, -18);
+			//Transform.LocalPosition = new Vector2(0, -18);
 		}
 	}
 

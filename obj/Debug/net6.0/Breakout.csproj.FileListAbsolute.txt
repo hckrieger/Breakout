@@ -29,3 +29,12 @@ C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Spr
 C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Fonts\Score.xnb
 C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Fonts\Title.xnb
 C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Fonts\PopUpMessage.xnb
+C:\Users\hunte\source\repos\MonoGame\games\Breakout\obj\Debug\net6.0\Breakout.sourcelink.json
+C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Audio\Sound\paddleHit.xnb
+C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Audio\Sound\wallHit.xnb
+C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Audio\Sound\Bricks\brickHit0.xnb
+C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Audio\Sound\Bricks\brickHit1.xnb
+C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Audio\Sound\Bricks\brickHit2.xnb
+C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Audio\Sound\Bricks\brickHit3.xnb
+C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Audio\Sound\Bricks\brickHit4.xnb
+C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Audio\Sound\Bricks\brickHit5.xnb

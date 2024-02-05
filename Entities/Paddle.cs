@@ -1,21 +1,13 @@
 ﻿using Breakout.Components;
-using Breakout.Scenes;
 using EC.Components;
 using EC.Components.Colliders;
 using EC.Components.Render;
-using EC.Components.Renderers;
 using EC.CoreSystem;
 using EC.Services;
+using EC.Services.AssetManagers;
 using EC.Utilities.Extensions;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
-using static Breakout.Scenes.PlayingScene;
 
 namespace Breakout.Entities
 {
@@ -26,36 +18,35 @@ namespace Breakout.Entities
 		private PaddleColliders paddleColliders;
 		private CollisionManager collisionManager;
 		private BoxCollider2D gameWorldBounds;
+		private AudioAssetManager audioAssetManager;
 
+		bool hasCollidedWithOneSection = false;
 		public enum LaunchSection
 		{
 			OuterLeft,
 			MiddleLeft,
 			Center,
 			MiddleRight,
-			OuterRight
+			OuterRight,
+			None
 		}
 
 
 		public Paddle(BoxCollider2D gameWorldBounds, Game game) : base(game)
 		{
-
-			rectangleSize = new Vector2(90, 20);
-
-			this.LoadRectangleComponents("paddle", (int)rectangleSize.X, (int)rectangleSize.Y, Color.Azure, game, true);
-
-
 			this.gameWorldBounds = gameWorldBounds;
-
+			audioAssetManager = game.Services.GetService<AudioAssetManager>();
 		}
 
 		public override void Initialize()
 		{
 			base.Initialize();
 
+			rectangleSize = new Vector2(90, 20);
+
+			this.LoadRectangleComponents("paddle", (int)rectangleSize.X, (int)rectangleSize.Y, Color.Azure, Game, true);
 
 			GetComponent<Origin>().Value = GetComponent<RectangleRenderer>().TextureCenter;
-			//AddComponent(new Origin(GetComponent<RectangleRenderer>().TextureCenter, this));
 
 
 			paddleColliders = new PaddleColliders(this, 5, rectangleSize);
@@ -79,7 +70,7 @@ namespace Breakout.Entities
 
 			TrackPosition();
 
-
+			
 		}
 
 		public void TrackPosition()
@@ -118,14 +109,18 @@ namespace Breakout.Entities
 
 			for (int i = 0; i < paddleColliders.SectionCount; i++)
 			{
-				if (collisionManager.ShapesIntersect(ball.GetComponent<CircleCollider2D>(), paddleColliders.GetSection(i)))
+				if (collisionManager.ShapesIntersect(ball.GetComponent<CircleCollider2D>(), paddleColliders.GetSection(i)) && !hasCollidedWithOneSection)
 				{
+					hasCollidedWithOneSection = true;
 					ball.ReflectBallFromSection(enumValues[i], this);
-					//break;
+					
 				}
 			}
 
-			if (enumValues.Length != paddleColliders.SectionCount)
+			if (hasCollidedWithOneSection && !collisionManager.ShapesIntersect(ball.GetComponent<CircleCollider2D>(), GetComponent<BoxCollider2D>()))
+				hasCollidedWithOneSection = false;
+
+			if (enumValues.Length != paddleColliders.SectionCount+1)
 			{
 				throw new Exception("quanity and sequence of enum elements needs to correspond with the quanity and sequence of paddle colliders");
 			}

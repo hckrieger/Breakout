@@ -80,7 +80,11 @@ namespace Breakout.Entities
 				}
 			}
 
-
+			foreach (var entity in windowEntities)
+			{
+				entity.IntendedVisible = false;
+				entity.IntendedEnable = false;
+			}
 
 			SetAllEndWindowEntitiesVisibility(false);
 		}
@@ -98,8 +102,12 @@ namespace Breakout.Entities
 		{
 			foreach (var entity in windowEntities)
 			{
-				entity.Visible = visible;
-				entity.Enabled = visible;
+				entity.IntendedVisible = visible;
+				entity.IntendedEnable = visible;
+
+
+				entity.Visible = entity.IntendedVisible;
+				entity.Enabled = entity.IntendedEnable;
 			}
 
 		}

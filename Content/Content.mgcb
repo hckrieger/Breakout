@@ -13,6 +13,54 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Audio/Sound/Bricks/brickHit0.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sound/Bricks/brickHit0.wav
+
+#begin Audio/Sound/Bricks/brickHit1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sound/Bricks/brickHit1.wav
+
+#begin Audio/Sound/Bricks/brickHit2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sound/Bricks/brickHit2.wav
+
+#begin Audio/Sound/Bricks/brickHit3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sound/Bricks/brickHit3.wav
+
+#begin Audio/Sound/Bricks/brickHit4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sound/Bricks/brickHit4.wav
+
+#begin Audio/Sound/Bricks/brickHit5.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sound/Bricks/brickHit5.wav
+
+#begin Audio/Sound/paddleHit.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sound/paddleHit.wav
+
+#begin Audio/Sound/wallHit.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sound/wallHit.wav
+
 #begin Fonts/PopUpMessage.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
