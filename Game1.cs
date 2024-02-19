@@ -1,5 +1,6 @@
 ﻿using Breakout.Scenes;
 using EC;
+using Microsoft.Xna.Framework;
 
 
 namespace Breakout
@@ -11,16 +12,14 @@ namespace Breakout
 		public Game1()
 		{
 			IsMouseVisible = true;
-			WindowWidth = 900;
-			WindowHeight = 600;
+			
 		}
 
 		protected override void Initialize()
 		{
-
-
-
 			base.Initialize();
+			SetWindowSize(900, 600);
+			IsFullScreen = true;
 
 			// TODO: Add your initialization logic here
 			SceneManager.AddScene(MAIN_MENU_SCREEN, new MainMenuScreen(this));

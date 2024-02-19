@@ -72,13 +72,13 @@ namespace Breakout.Scenes
 		public void SetupGameZones()
 		{
 			HUD = new Entity(Game);
-			HUD.LoadRectangleComponents("HUD", displayManager.Width, 25, Color.LightCoral, Game, true);
+			HUD.LoadRectangleComponents("HUD", displayManager.WindowWidth, 25, Color.LightCoral, Game, true);
 			HUD.GetComponent<RectangleRenderer>().LayerDepth = .1f;
 			AddEntity(HUD, RootEntity);
 
 			GameWorld = new Entity(Game);
 			var accountForTopBounds = HUD.GetComponent<BoxCollider2D>().Bounds.Height;
-			GameWorld.LoadRectangleComponents("game world bounds", displayManager.Width, displayManager.Height - accountForTopBounds, null, Game, true);
+			GameWorld.LoadRectangleComponents("game world bounds", displayManager.InternalResolution.X, displayManager.InternalResolution.Y - accountForTopBounds, null, Game, true);
 			GameWorld.Transform.LocalPosition = new Vector2(0, accountForTopBounds);
 
 			AddEntity(GameWorld, RootEntity);
@@ -171,7 +171,7 @@ namespace Breakout.Scenes
 				//....then launch the ball at a given angle upon mouseclick. 
 				if (inputManager.MouseJustPressed() && inputManager.MouseOnScreen())
 				{
-					if (paddle.GetComponent<Transform>().Position.X >= displayManager.WindowCenter.X)
+					if (paddle.GetComponent<Transform>().Position.X >= displayManager.InternalResolution.X / 2)
 						paddle.DetachBall(ball, Paddle.LaunchSection.MiddleLeft);
 					else
 						paddle.DetachBall(ball, Paddle.LaunchSection.MiddleRight);
@@ -241,7 +241,7 @@ namespace Breakout.Scenes
 
 			//If the ball is below the bottom of the screen upon the window popping up....
 			//...then show a game over message; if it's above that show a win message
-			if (ball.Transform.Position.Y > displayManager.Height)
+			if (ball.Transform.Position.Y > displayManager.WindowHeight)
 				endGameWindow.Message = "Try again!";
 			else
 				endGameWindow.Message = "You win!";

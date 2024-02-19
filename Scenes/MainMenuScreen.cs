@@ -9,6 +9,7 @@ using EC.Utilities.Extensions;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -22,10 +23,13 @@ namespace Breakout.Scenes
 		private DisplayManager displayManager;
 
 		private Entity playButtonBox;
-		private Entity exitButtonBox; 
+		private Entity exitButtonBox;
+
+		private InputManager inputManager;
 
 		public MainMenuScreen(Game1 game) : base(game)
 		{
+			inputManager = game.Services.GetService<InputManager>();
 		}
 
 		public override void Initialize()
@@ -39,7 +43,7 @@ namespace Breakout.Scenes
 
 			playButtonBox = new Entity(Game);
 			playButtonBox.CreateButton("play button", new Vector2(100, 33), true, Color.MonoGameOrange, Game, () => sceneManager.ChangeScene(Game1.PLAYING_SCENE));
-			playButtonBox.Transform.LocalPosition = new Vector2(displayManager.WindowCenter.X, 250);
+			playButtonBox.Transform.LocalPosition = new Vector2(displayManager.InternalResolution.X / 2, 250);
 			playButtonBox.AddButtonText("Fonts/Score", "Play", Color.Black, Game, AddEntity);
 			AddEntity(playButtonBox);
 
@@ -47,7 +51,7 @@ namespace Breakout.Scenes
 
 			exitButtonBox = new Entity(Game);
 			exitButtonBox.CreateButton("exit button", new Vector2(100, 33), true, new Color(40, 100, 40, 1), Game, () => Game.Exit());
-			exitButtonBox.Transform.LocalPosition = new Vector2(displayManager.WindowCenter.X, 325);
+			exitButtonBox.Transform.LocalPosition = new Vector2(displayManager.InternalResolution.X / 2, 325);
 			exitButtonBox.AddButtonText("Fonts/Score", "Exit", Color.Black, Game, AddEntity);
 			AddEntity(exitButtonBox);
 
@@ -58,11 +62,17 @@ namespace Breakout.Scenes
 		{
 			Entity titleEntity = new Entity(Game);
 			titleEntity.LoadTextComponents("Fonts/Title", "Breakout", Color.MonoGameOrange, Game, TextRenderer.Alignment.Center);
-			titleEntity.Transform.LocalPosition = new Vector2(displayManager.WindowCenter.X, 100);
+			titleEntity.Transform.LocalPosition = new Vector2(displayManager.InternalResolution.X / 2, 100);
 			AddEntity(titleEntity);
 		}
 
+		public override void Update(GameTime gameTime)
+		{
+			base.Update(gameTime);
 
+
+			Debug.WriteLine($"Mouse Position: {inputManager.MousePosition()}");
+		}
 
 	}
 }

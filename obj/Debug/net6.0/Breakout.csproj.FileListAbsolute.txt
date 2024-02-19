@@ -19,7 +19,6 @@ C:\Users\hunte\source\repos\MonoGame\games\Breakout\obj\Debug\net6.0\Breakout.Ge
 C:\Users\hunte\source\repos\MonoGame\games\Breakout\obj\Debug\net6.0\Breakout.AssemblyInfoInputs.cache
 C:\Users\hunte\source\repos\MonoGame\games\Breakout\obj\Debug\net6.0\Breakout.AssemblyInfo.cs
 C:\Users\hunte\source\repos\MonoGame\games\Breakout\obj\Debug\net6.0\Breakout.csproj.CoreCompileInputs.cache
-C:\Users\hunte\source\repos\MonoGame\games\Breakout\obj\Debug\net6.0\Breakout.csproj.CopyComplete
 C:\Users\hunte\source\repos\MonoGame\games\Breakout\obj\Debug\net6.0\Breakout.dll
 C:\Users\hunte\source\repos\MonoGame\games\Breakout\obj\Debug\net6.0\refint\Breakout.dll
 C:\Users\hunte\source\repos\MonoGame\games\Breakout\obj\Debug\net6.0\Breakout.pdb
@@ -38,3 +37,4 @@ C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Aud
 C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Audio\Sound\Bricks\brickHit3.xnb
 C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Audio\Sound\Bricks\brickHit4.xnb
 C:\Users\hunte\source\repos\MonoGame\games\Breakout\bin\Debug\net6.0\Content\Audio\Sound\Bricks\brickHit5.xnb
+C:\Users\hunte\source\repos\MonoGame\games\Breakout\obj\Debug\net6.0\Breakout.csproj.Up2Date
